@@ -1,0 +1,138 @@
+# Harrier is a prioritized reactive hunter. Higher rules claim controls
+# first: the safe zone, then evasion when a robot comes inside 150, then
+# tracking. It holds about 300, crossing the line of fire on a steady beat,
+# and leads its shots; with nothing in sight it bends its search towards a
+# passive cue. Get in close and it stops tracking to back off.
+bot Harrier
+modes 2d 3d
+rulesets classic inertial-2d gravity-flat gravity-hills zero-g
+
+# Force rulesets (everything but classic) push the hull with thrust,
+# strafe and lift towards a desired velocity, so each rule below builds one.
+# Sudden death: head for the middle of the safe zone.
+rule force-home priority 260 when physics-mode and zone-active and zone-distance > zone-radius * 0.75
+  thrust clamp(((cos(zone-bearing) * cos(zone-elevation) * clamp(zone-distance - zone-radius * 0.4, 10, 80) - vx) * forward-x + (sin(zone-bearing) * cos(zone-elevation) * clamp(zone-distance - zone-radius * 0.4, 10, 80) - vy) * forward-y) / 50, -1, 1)
+  strafe clamp(((cos(zone-bearing) * cos(zone-elevation) * clamp(zone-distance - zone-radius * 0.4, 10, 80) - vx) * right-x + (sin(zone-bearing) * cos(zone-elevation) * clamp(zone-distance - zone-radius * 0.4, 10, 80) - vy) * right-y) / 50, -1, 1)
+  lift clamp(((not gravity) * sin(zone-elevation) * clamp(zone-distance - zone-radius * 0.4, 10, 80) + gravity * clamp((terrain-height + 115 - z) * 1.2, -35, 35) - vz) / 50 - gravity-z / 100, -1, 1)
+end
+
+# The storm: fly out across its path at 80 a second.
+# Out across the storm's path, on the side away from its centre: square to
+# its heading, leaning a third of the way to straight out.
+rule force-storm priority 250 when physics-mode and storm-distance < 80
+  thrust clamp(((cos(((storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1)) + angle(storm-bearing + 180, (storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1))) / 3)) * 80 - vx) * forward-x + (sin(((storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1)) + angle(storm-bearing + 180, (storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1))) / 3)) * 80 - vy) * forward-y) / 50, -1, 1)
+  strafe clamp(((cos(((storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1)) + angle(storm-bearing + 180, (storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1))) / 3)) * 80 - vx) * right-x + (sin(((storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1)) + angle(storm-bearing + 180, (storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1))) / 3)) * 80 - vy) * right-y) / 50, -1, 1)
+end
+
+# Crowded: back straight off and slide sideways, still clear of the walls
+# (the max/min terms push in from 80 units out).
+rule force-evade priority 240 when physics-mode and contact and range < 150
+  thrust clamp((-70 - (vx * forward-x + vy * forward-y + vz * forward-z)) / 50 + (max(0, (80 - x) * 1.5) + min(0, (width - 80 - x) * 1.5)) * forward-x / 50 + (max(0, (80 - y) * 1.5) + min(0, (height - 80 - y) * 1.5)) * forward-y / 50, -1, 1)
+  strafe clamp((60 - (vx * right-x + vy * right-y + vz * right-z)) / 50 + (max(0, (80 - x) * 1.5) + min(0, (width - 80 - x) * 1.5)) * right-x / 50 + (max(0, (80 - y) * 1.5) + min(0, (height - 80 - y) * 1.5)) * right-y / 50, -1, 1)
+end
+
+# Face the target, hold 300 and strafe across its line of fire, turning
+# every one and a half seconds (two seconds in gravity); slower on a low
+# battery.
+rule force-track priority 220 when physics-mode and contact
+  thrust clamp((clamp((range - 300) * 0.65, -70, 70) - (vx * forward-x + vy * forward-y + vz * forward-z)) / 50 + (max(0, (80 - x) * 1.5) + min(0, (width - 80 - x) * 1.5)) * forward-x / 50 + (max(0, (80 - y) * 1.5) + min(0, (height - 80 - y) * 1.5)) * forward-y / 50, -1, 1)
+  strafe clamp(((1 - 2 * (wave(60 + 25 * gravity, 1) < 0)) * 50 * clamp(energy-fraction * 2 - 0.2, 0.25, 1) - (vx * right-x + vy * right-y + vz * right-z)) / 50 + (max(0, (80 - x) * 1.5) + min(0, (width - 80 - x) * 1.5)) * right-x / 50 + (max(0, (80 - y) * 1.5) + min(0, (height - 80 - y) * 1.5)) * right-y / 50, -1, 1)
+  yaw-torque clamp(angle(bearing, heading) / 70 - yaw-rate / 60, -1, 1)
+  # Lead. The scanner followed the last echo, so the angle from scan-heading
+  # is the bearing change in a tick (20 ticks a second). Shots here carry
+  # our velocity, so the relative change is the whole lead. A shot that
+  # arrives in a second flies at range a second, within the legal speeds.
+  aim-heading bearing + clamp(angle(bearing, scan-heading) * (abs(angle(bearing, scan-heading)) < 8) * 20 * range / clamp(range, shot-speed-base + shot-speed-per-power * power-max, shot-speed-base + shot-speed-per-power * power-min), -30, 30)
+  # Gravity drops a shot by g t^2 / 2 over t = range / speed; 28.65 is
+  # 57.3 / 2, in degrees.
+  aim-pitch elevation + clamp((elevation - scan-pitch) * (abs(elevation - scan-pitch) < 8) * 20 * range / clamp(range, shot-speed-base + shot-speed-per-power * power-max, shot-speed-base + shot-speed-per-power * power-min), -20, 20) - gravity-z * 28.65 * range / clamp(range, shot-speed-base + shot-speed-per-power * power-max, shot-speed-base + shot-speed-per-power * power-min) / clamp(range, shot-speed-base + shot-speed-per-power * power-max, shot-speed-base + shot-speed-per-power * power-min)
+end
+
+# No target but a cue: drift towards it, facing it.
+rule force-listen priority 205 when physics-mode and cue-present
+  thrust clamp(((cos(cue-bearing) * 60 - vx) * forward-x + (sin(cue-bearing) * 60 - vy) * forward-y) / 50, -1, 1)
+  strafe clamp(((cos(cue-bearing) * 60 - vx) * right-x + (sin(cue-bearing) * 60 - vy) * right-y) / 50, -1, 1)
+  yaw-torque clamp(angle(cue-bearing, heading) / 70 - yaw-rate / 60, -1, 1)
+end
+
+# No target: drift round the middle of the arena.
+rule force-flight priority 200 when physics-mode
+  thrust clamp(((clamp((width / 2 - x) * 0.3, -60, 60) + 45 * cos(tick * 4) - vx) * forward-x + (clamp((height / 2 - y) * 0.3, -60, 60) + 45 * sin(tick * 4) - vy) * forward-y) / 50, -1, 1)
+  strafe clamp(((clamp((width / 2 - x) * 0.3, -60, 60) + 45 * cos(tick * 4) - vx) * right-x + (clamp((height / 2 - y) * 0.3, -60, 60) + 45 * sin(tick * 4) - vy) * right-y) / 50, -1, 1)
+  yaw-torque clamp(0.3 - yaw-rate / 60, -1, 1)
+end
+
+# 3D: hover about 115 above the ground (or close the height gap in zero-g),
+# keep the hull level and damp spin.
+rule force-level priority 190 when physics-mode and mode3
+  lift clamp(((not gravity) * (clamp((depth / 2 - z) * 0.3, -40, 40) + contact * sin(elevation) * clamp((range - 300) * 0.65, -70, 70)) + gravity * clamp((terrain-height + 115 - z) * 1.2, -35, 35) - vz) / 50 - gravity-z / 100, -1, 1)
+  pitch-torque clamp(0 - pitch / 40 - pitch-rate / 60, -1, 1)
+  roll-torque clamp(0 - roll-rate / 60, -1, 1)
+end
+
+# Classic rulesets steer with drive, turn and pitch.
+rule home priority 150 when not physics-mode and zone-active and zone-distance > zone-radius * 0.75
+  turn clamp(angle(zone-bearing, heading) / 20, -1, 1)
+  pitch clamp((zone-elevation - pitch) / 20, -1, 1)
+  drive clamp((zone-distance - zone-radius * 0.4) / 60, 0.2, 0.8 - 0.2 * (energy-fraction < 0.3))
+end
+
+# The storm: drive out across its path.
+# Out across the storm's path, on the side away from its centre: square to
+# its heading, leaning a third of the way to straight out.
+rule storm priority 140 when not physics-mode and storm-distance < 80
+  turn clamp(angle(((storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1)) + angle(storm-bearing + 180, (storm-heading + 90 * clamp(angle(storm-bearing + 180, storm-heading) * 100, -1, 1))) / 3), heading) / 20, -1, 1)
+  pitch clamp((0 - pitch) / 20, -1, 1)
+  drive 1
+end
+
+# Crowded: reverse away on a hard turn. Ease the throttle on a low battery
+# so movement leaves enough regeneration to charge the next shot.
+rule evade priority 120 when not physics-mode and contact and range < 150
+  drive -0.8 + 0.35 * (energy-fraction < 0.3)
+  turn 0.9
+  pitch clamp((0 - pitch) / 20, -1, 1)
+end
+
+# Side-on to the target, driving forward and back on a steady beat (3.7
+# seconds in 2D, 1.8 in 3D) and angled in or out to hold 300.
+rule engage priority 100 when not physics-mode and contact
+  drive (1 - 2 * (wave(74 - 38 * mode3, 1) < 0)) * (0.72 - 0.3 * mode3 - 0.3 * (energy-fraction < 0.3))
+  turn clamp(angle(bearing + 90 - (1 - 2 * (wave(74 - 38 * mode3, 1) < 0)) * clamp((range - 300) / 4, -35, 35), heading) / 20, -1, 1)
+  pitch clamp((elevation * 0.5 - pitch) / 20, -1, 1)
+  # Classic shots do not carry our own speed, so add our crossing speed
+  # back: full drive is 95 a second, and 95 * 57.3 = 5443 in degrees.
+  aim-heading bearing + clamp((angle(bearing, scan-heading) * (abs(angle(bearing, scan-heading)) < 8) * 20 * range + 5443 * (1 - 2 * (wave(74 - 38 * mode3, 1) < 0)) * (0.72 - 0.3 * mode3 - 0.3 * (energy-fraction < 0.3)) * sin(heading - bearing)) / clamp(range, shot-speed-base + shot-speed-per-power * power-max, shot-speed-base + shot-speed-per-power * power-min), -30, 30)
+  aim-pitch elevation + clamp((elevation - scan-pitch) * (abs(elevation - scan-pitch) < 8) * 20 * range / clamp(range, shot-speed-base + shot-speed-per-power * power-max, shot-speed-base + shot-speed-per-power * power-min), -20, 20)
+end
+
+# Heaviest shot that arrives within a second, fired when the turret is
+# near the target and the battery can pay for a full-power shot.
+rule gun priority 90 when contact
+  scan-heading bearing
+  scan-pitch elevation
+  scan-arc 20
+  power clamp((shot-speed-base - range) / (0 - shot-speed-per-power), power-min, power-max)
+  fire cooldown == 0 and range < 700 and abs(aim-error) < 6 and energy >= fire-base + fire-per-power * power-max + 4
+end
+
+# No target: wander on a curve that bends towards the middle, sweeping a
+# 40 degree arc (about 520 reach) round the circle.
+# No target but a cue: bend the search towards it.
+rule search-cue priority 12 when not physics-mode and cue-present
+  drive 0.6 - 0.25 * (energy-fraction < 0.3)
+  turn clamp(angle(cue-bearing, heading) / 45, -1, 1)
+  pitch clamp((wave(43, 10) - pitch) / 20, -1, 1)
+end
+
+rule search-move priority 10 when not physics-mode
+  drive 0.6 - 0.25 * (energy-fraction < 0.3)
+  turn clamp((cos(heading) * (height / 2 - y) - sin(heading) * (width / 2 - x)) / 80, -1, 1) * 0.7 + 0.25
+  pitch clamp((wave(43, 10) - pitch) / 20, -1, 1)
+end
+
+rule search priority 5 when true
+  scan-heading scan-heading + 36
+  scan-pitch mode3 * wave(31, 30)
+  scan-arc 40
+end

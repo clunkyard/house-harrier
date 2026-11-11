@@ -1,0 +1,73 @@
+{
+  "name": "Harrier",
+  "language": "vane",
+  "protocol": 2,
+  "strategy": "Prioritized reactive hunter: holds a middle range crossing the line of fire on a steady beat and leads its shots, but backs off whenever a robot gets close.",
+  "entry": "harrier.vane",
+  "supportedModes": [
+    "2d",
+    "3d"
+  ],
+  "resourceModes": [
+    "open",
+    "dsl"
+  ],
+  "supportedRulesets": [
+    "classic",
+    "inertial-2d",
+    "gravity-flat",
+    "gravity-hills",
+    "zero-g"
+  ],
+  "avatar": {
+    "v": 2,
+    "chassis": {
+      "shape": "wedge",
+      "length": 0.7,
+      "width": 0.423,
+      "height": 0.132,
+      "taper": 0.35,
+      "bevel": 0.4,
+      "deck": 0.6
+    },
+    "locomotion": {
+      "kind": "thrusters",
+      "size": 1,
+      "count": 2
+    },
+    "turret": {
+      "shape": "box",
+      "size": 1,
+      "offset": 0
+    },
+    "barrels": {
+      "count": 1,
+      "length": 0.34,
+      "thickness": 1,
+      "muzzle": "plain"
+    },
+    "scanner": {
+      "kind": "visor",
+      "size": 1,
+      "offset": -0.16
+    },
+    "extras": {
+      "plates": 0,
+      "fins": 2,
+      "antennae": 0
+    },
+    "palette": {
+      "primary": "#6E529B",
+      "secondary": "#E3DACB",
+      "accent": "#B63D27"
+    },
+    "decal": "chevron"
+  },
+  "command": [
+    "node",
+    "src/dsl/runner.js",
+    "vane",
+    "bots/dsl/vane/harrier.vane"
+  ],
+  "publicDescription": "Holds a middle range, crossing your line of fire on a steady beat, and leads its shots. Get in close and it stops to back off."
+}

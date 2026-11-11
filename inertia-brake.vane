@@ -1,0 +1,19 @@
+bot Brake Test
+modes 2d
+rulesets inertial-2d
+
+# Burn forward first, then make braking an explicit tactical decision.
+rule braking priority 100 when tick >= 80
+  brake true
+  thrust 0
+  yaw-torque (0 - yaw-rate) / 90
+  scan-heading sweep(7)
+  scan-arc 60
+end
+
+rule accelerate priority 10 when true
+  thrust 1
+  yaw-torque 0.24
+  scan-heading sweep(7)
+  scan-arc 60
+end

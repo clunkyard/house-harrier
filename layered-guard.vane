@@ -1,0 +1,32 @@
+# Classic 2D workshop: compose independent steering, targeting and battery
+# policies. Higher rules claim individual controls, not the whole decision.
+bot Layered Guard
+modes 2d
+rulesets classic
+
+rule boundary priority 400 when x < 70 or x > width - 70 or y < 70 or y > height - 70
+  turn clamp(angle(atan2(height / 2 - y, width / 2 - x), heading) / 45, -1, 1)
+  drive 0.5
+end
+
+# This veto owns fire even when target matches. It leaves aim and scan free.
+rule reserve priority 300 when battery < 20
+  fire false
+  drive 0.2
+end
+
+rule target priority 100 when contact
+  aim-heading bearing
+  scan-heading bearing
+  scan-arc 20
+  power 1
+  fire cooldown == 0 and abs(aim-error) < 3
+  turn clamp(angle(bearing + 90, heading) / 45, -1, 1)
+end
+
+rule patrol priority 10 when true
+  drive 0.5
+  turn 0.2
+  scan-heading sweep(12)
+  scan-arc 40
+end

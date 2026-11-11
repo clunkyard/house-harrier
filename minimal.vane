@@ -1,0 +1,36 @@
+bot First Vane
+modes 2d 3d
+
+# Leave the storm straight away from its centre before anything else.
+rule storm priority 200 when storm-distance < 80
+  drive 1
+  turn clamp(angle(storm-bearing + 180, heading) / 30, -1, 1)
+end
+
+rule target priority 100 when contact
+  status-text "TRACK"
+  status-value range
+  aim-heading bearing
+  aim-pitch elevation
+  scan-heading bearing
+  scan-pitch elevation
+  fire cooldown == 0 and abs(aim-error) < 3 and energy >= fire-base + fire-per-power + 5
+end
+
+# A cue says roughly where a robot is: head that way and sweep across it.
+rule listen priority 20 when cue-present and not contact
+  drive 0.7
+  turn clamp(angle(cue-bearing, heading) / 45, -1, 1)
+  scan-heading cue-bearing + wave(12, cue-error + 10)
+  scan-arc 30
+end
+
+rule roam priority 10 when true
+  status-text "SEARCH"
+  status-value tick
+  drive 0.7
+  turn 0.25
+  scan-heading sweep(8)
+  scan-pitch wave(30, 22)
+  scan-arc 58
+end

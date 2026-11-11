@@ -1,0 +1,10 @@
+{
+  "id": "workshop-layered-guard",
+  "name": "Layered Guard",
+  "language": "Vane DSL",
+  "protocol": 2,
+  "supportedModes": ["2d"],
+  "supportedRulesets": ["classic"],
+  "resourceModes": ["open", "dsl"],
+  "command": ["node", "src/dsl/runner.js", "vane", "bots/dsl/vane/layered-guard.vane"]
+}

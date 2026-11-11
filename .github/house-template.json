@@ -1,0 +1,118 @@
+{
+  "v": 1,
+  "repository": "clunkyard/house-harrier",
+  "source": {
+    "botId": "edbfcacb-715c-4bbe-be12-3c14772c9d70",
+    "revisionId": "76afb4ba-43be-4464-979c-7c07cc46b964",
+    "manifestHash": "37ebe6d95495cf38c243ad5b0d309e777cf4fad2d965aaccfc9134aa01a3027c"
+  },
+  "visibleManifestHash": "37ebe6d95495cf38c243ad5b0d309e777cf4fad2d965aaccfc9134aa01a3027c",
+  "language": "vane",
+  "sourceFiles": [
+    {
+      "path": "SPEC.md",
+      "mode": 384,
+      "size": 11582,
+      "sha256": "aea53a1ddc46ab4c4b47d9b4d933e0f760730c1f19b7d4bf2838fd522276833e"
+    },
+    {
+      "path": "bot.json",
+      "mode": 420,
+      "size": 1513,
+      "sha256": "d74259b9083590046e2a13e117f3c90b3e1b16d1eb3c3c8a59266d422e98d547"
+    },
+    {
+      "path": "harrier.vane",
+      "mode": 384,
+      "size": 10563,
+      "sha256": "77ae1135efe7b388a1626c1e1780a97d9f6768580a5c241d31206d2e18a8e4a4"
+    },
+    {
+      "path": "inertia-brake.vane",
+      "mode": 384,
+      "size": 368,
+      "sha256": "7948d28ed27de123b71fd2219056f6210ccaa4de478e9de03a5a799ce78b8b22"
+    },
+    {
+      "path": "layered-guard.json",
+      "mode": 384,
+      "size": 295,
+      "sha256": "b4c6026ee51c0accedb1d1d147fea3027530c51c77d32aba32d2c70bd4d0124a"
+    },
+    {
+      "path": "layered-guard.vane",
+      "mode": 384,
+      "size": 840,
+      "sha256": "ff915ed8e8f58bcf01cac14a4bc6ff9a7bb49dc14227a65bc0ab36ffd96184f0"
+    },
+    {
+      "path": "minimal.vane",
+      "mode": 384,
+      "size": 926,
+      "sha256": "5879a6e05c05b4ad19f69965f219cf41540b792d4a6eab22bab74de2f801c159"
+    }
+  ],
+  "directories": [],
+  "managed": [
+    {
+      "path": ".clunkyard-source.json",
+      "sha256": "3c143e14a52f47126dad6aaf4d70dbc91ffb539f3671eab50f6d54428d1b173f",
+      "mode": 420
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "e8b41e5528b2d3a8ae4c5dabfcd32ef50c05fff41de096c3701059b5c68a80db",
+      "mode": 420
+    },
+    {
+      "path": "bot.json",
+      "sha256": "fe6d54f9221e9aa4a4ccb792db93c351fc8053287d2679d1fa63a837f3e419db",
+      "mode": 420
+    },
+    {
+      "path": "harrier.vane",
+      "sha256": "77ae1135efe7b388a1626c1e1780a97d9f6768580a5c241d31206d2e18a8e4a4",
+      "mode": 384
+    },
+    {
+      "path": "inertia-brake.vane",
+      "sha256": "7948d28ed27de123b71fd2219056f6210ccaa4de478e9de03a5a799ce78b8b22",
+      "mode": 384
+    },
+    {
+      "path": "layered-guard.json",
+      "sha256": "b4c6026ee51c0accedb1d1d147fea3027530c51c77d32aba32d2c70bd4d0124a",
+      "mode": 384
+    },
+    {
+      "path": "layered-guard.vane",
+      "sha256": "ff915ed8e8f58bcf01cac14a4bc6ff9a7bb49dc14227a65bc0ab36ffd96184f0",
+      "mode": 384
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "652cbd0ba5e21c5b7ee7a52b539cc9087b38b1bfc3ae0baacc6828c8dfdf2e95",
+      "mode": 420
+    },
+    {
+      "path": "Makefile",
+      "sha256": "b41bef136a1fec767be62431121a98d96259ccd8415fc3d71665b22efcd8f79d",
+      "mode": 420
+    },
+    {
+      "path": "minimal.vane",
+      "sha256": "5879a6e05c05b4ad19f69965f219cf41540b792d4a6eab22bab74de2f801c159",
+      "mode": 384
+    },
+    {
+      "path": "README.md",
+      "sha256": "fea781b93e5c2a155f716ce36891a071f8df82debe2b94b86b8a72c85187b640",
+      "mode": 420
+    },
+    {
+      "path": "SPEC.md",
+      "sha256": "aea53a1ddc46ab4c4b47d9b4d933e0f760730c1f19b7d4bf2838fd522276833e",
+      "mode": 384
+    }
+  ]
+}
