@@ -3,7 +3,7 @@
   "repository": "clunkyard/house-harrier",
   "source": {
     "botId": "edbfcacb-715c-4bbe-be12-3c14772c9d70",
-    "revisionId": "76afb4ba-43be-4464-979c-7c07cc46b964",
+    "revisionId": "6d7eb67f-e694-4774-9bdc-b0cef9d7217d",
     "manifestHash": "37ebe6d95495cf38c243ad5b0d309e777cf4fad2d965aaccfc9134aa01a3027c"
   },
   "visibleManifestHash": "37ebe6d95495cf38c243ad5b0d309e777cf4fad2d965aaccfc9134aa01a3027c",
@@ -56,7 +56,7 @@
   "managed": [
     {
       "path": ".clunkyard-source.json",
-      "sha256": "3c143e14a52f47126dad6aaf4d70dbc91ffb539f3671eab50f6d54428d1b173f",
+      "sha256": "9a5aa576afe0e64b9bde85cab9f7906d8d08a44c5ba9cec5cf84f7d944991db3",
       "mode": 420
     },
     {
@@ -96,7 +96,7 @@
     },
     {
       "path": "Makefile",
-      "sha256": "b41bef136a1fec767be62431121a98d96259ccd8415fc3d71665b22efcd8f79d",
+      "sha256": "56113b1e7b8c900f9222ffed6cfba3382ff4835729e887cab6e75fbf991b4157",
       "mode": 420
     },
     {
@@ -106,7 +106,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "fea781b93e5c2a155f716ce36891a071f8df82debe2b94b86b8a72c85187b640",
+      "sha256": "8869e69c27db6da08ad84d41e1d77eb57173434201be8767403fdfd51fa9e893",
       "mode": 420
     },
     {
