@@ -26,7 +26,7 @@ end
 
 # Crowded: back straight off and slide sideways, still clear of the walls
 # (the max/min terms push in from 80 units out).
-rule force-evade priority 240 when physics-mode and contact and range < 150
+rule force-evade priority 240 when physics-mode and contact and range < 160
   thrust clamp((-70 - (vx * forward-x + vy * forward-y + vz * forward-z)) / 50 + (max(0, (80 - x) * 1.5) + min(0, (width - 80 - x) * 1.5)) * forward-x / 50 + (max(0, (80 - y) * 1.5) + min(0, (height - 80 - y) * 1.5)) * forward-y / 50, -1, 1)
   strafe clamp((60 - (vx * right-x + vy * right-y + vz * right-z)) / 50 + (max(0, (80 - x) * 1.5) + min(0, (width - 80 - x) * 1.5)) * right-x / 50 + (max(0, (80 - y) * 1.5) + min(0, (height - 80 - y) * 1.5)) * right-y / 50, -1, 1)
 end

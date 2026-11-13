@@ -3,10 +3,10 @@
   "repository": "clunkyard/house-harrier",
   "source": {
     "botId": "edbfcacb-715c-4bbe-be12-3c14772c9d70",
-    "revisionId": "6d7eb67f-e694-4774-9bdc-b0cef9d7217d",
-    "manifestHash": "37ebe6d95495cf38c243ad5b0d309e777cf4fad2d965aaccfc9134aa01a3027c"
+    "revisionId": "36e5a1da-1739-4dfd-a152-c3c7093bea76",
+    "manifestHash": "32d847d4f9fa100bfccd2381661d69b4420733f1890dc53a0e5a866848775661"
   },
-  "visibleManifestHash": "37ebe6d95495cf38c243ad5b0d309e777cf4fad2d965aaccfc9134aa01a3027c",
+  "visibleManifestHash": "32d847d4f9fa100bfccd2381661d69b4420733f1890dc53a0e5a866848775661",
   "language": "vane",
   "sourceFiles": [
     {
@@ -25,7 +25,7 @@
       "path": "harrier.vane",
       "mode": 384,
       "size": 10563,
-      "sha256": "77ae1135efe7b388a1626c1e1780a97d9f6768580a5c241d31206d2e18a8e4a4"
+      "sha256": "2d471c79ccf0aa6ab22bd291b69da6200e6afe042a441a5d139e57fba4198ff1"
     },
     {
       "path": "inertia-brake.vane",
@@ -56,7 +56,7 @@
   "managed": [
     {
       "path": ".clunkyard-source.json",
-      "sha256": "9a5aa576afe0e64b9bde85cab9f7906d8d08a44c5ba9cec5cf84f7d944991db3",
+      "sha256": "930bef75977910f8b0a23cbb1c7b92db102def083fa2072121d28250b0eec058",
       "mode": 420
     },
     {
@@ -71,7 +71,7 @@
     },
     {
       "path": "harrier.vane",
-      "sha256": "77ae1135efe7b388a1626c1e1780a97d9f6768580a5c241d31206d2e18a8e4a4",
+      "sha256": "2d471c79ccf0aa6ab22bd291b69da6200e6afe042a441a5d139e57fba4198ff1",
       "mode": 384
     },
     {
